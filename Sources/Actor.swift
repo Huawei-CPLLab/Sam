@@ -7,6 +7,9 @@
 //
 
 public protocol UnspecifiedActor {
+    /// The context of this actor
+    unowned var context:ActorCell { get }
+
     mutating func supervisorStrategy(error: Error) -> Void
     
     func preStart()

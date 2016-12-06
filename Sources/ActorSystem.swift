@@ -11,6 +11,8 @@ import Dispatch
 
 /// Actor inside the actor system which can be enhanced later to handle errors
 struct BaseActor: UnspecifiedActor {
+    unowned public var context: ActorCell
+
     func receive(_ msg: SystemMessage) { }
     mutating public func supervisorStrategy(error: Error) { }
     public func preStart() { }
@@ -57,7 +59,7 @@ public class ActorSystem: CustomStringConvertible {
         let userContext = ActorCell(system: self, parent: nil, actorRef: userRef)
         userRef.actorCell = userContext
         // Later we can create an actor with special error handling mechanism
-        userContext.actor = BaseActor()
+        userContext.actor = BaseActor(context: userContext)
     }
     
     /// Used for a child actor cell to get an exeuction queue
