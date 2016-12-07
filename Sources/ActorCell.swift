@@ -47,14 +47,11 @@ public class ActorCell {
     }
     
     /// To the ActorRef of this actor. Unowned due to not want to cause cycle
-    private unowned let unspecifiedThis: ActorRef
-    public var this: ActorRef {
-        get { return unspecifiedThis }
-    }
+    public unowned var this: ActorRef
     
     /// Called by context.actorOf to create a cell with an actor
     public init(system: ActorSystem, parent: ActorRef?, actorRef: ActorRef) {
-        self.unspecifiedThis = actorRef
+        self.this = actorRef
         self.parent = parent
         self.system = system
         self.underlyingQueue = system.assignQueue()
@@ -259,10 +256,7 @@ public class KnownActorCell<ActorType: Actor>: ActorCell {
     var actorConstructor: (KnownActorCell<ActorType>)->ActorType
     
     /// To the ActorRef of this actor. Unowned due to not want to cause cycle
-    private unowned let knownThis: KnownActorRef<ActorType>
-    override public  var this: KnownActorRef<ActorType> {
-        get { return knownThis }
-    }
+    public unowned var ref: KnownActorRef<ActorType>
     
     public func tell(_ msg: ActorType.ActorMessage) {
         underlyingQueue.async {
@@ -273,7 +267,7 @@ public class KnownActorCell<ActorType: Actor>: ActorCell {
     /// Called by context.actorOf to create a cell with an actor
     public init(system: ActorSystem, parent: ActorRef?, actorConstructor: @escaping (KnownActorCell<ActorType>)->ActorType, actorRef: KnownActorRef<ActorType>) {
         self.actorConstructor = actorConstructor
-        self.knownThis = actorRef
+        self.ref = actorRef
         super.init(system: system, parent: parent, actorRef: actorRef)
     }
 }
