@@ -23,6 +23,13 @@ extension UnspecifiedActor {
 }
 
 public protocol Actor: UnspecifiedActor {
+    /// The context of this actor
+    unowned var context:KnownActorCell<Self> { get }
+
     associatedtype ActorMessage: Message
     mutating func receive(_ msg: ActorMessage)
+}
+
+extension Actor {
+    public var this: KnownActorRef<Self> { return context.this }
 }

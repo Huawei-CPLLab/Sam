@@ -47,11 +47,14 @@ public class ActorCell {
     }
     
     /// To the ActorRef of this actor. Unowned due to not want to cause cycle
-    unowned let this: ActorRef
+    private unowned let unspecifiedThis: ActorRef
+    var this: ActorRef {
+        get { return unspecifiedThis }
+    }
     
     /// Called by context.actorOf to create a cell with an actor
     public init(system: ActorSystem, parent: ActorRef?, actorRef: ActorRef) {
-        self.this = actorRef
+        self.unspecifiedThis = actorRef
         self.parent = parent
         self.system = system
         self.underlyingQueue = system.assignQueue()
@@ -255,6 +258,12 @@ public class KnownActorCell<ActorType: Actor>: ActorCell {
     /// Used to restart the actor instance
     var actorConstructor: (KnownActorCell<ActorType>)->ActorType
     
+    /// To the ActorRef of this actor. Unowned due to not want to cause cycle
+    private unowned let knownThis: KnownActorRef<ActorType>
+    override var this: KnownActorRef<ActorType> {
+        get { return knownThis }
+    }
+    
     public func tell(_ msg: ActorType.ActorMessage) {
         underlyingQueue.async {
             self.knownActor.receive(msg)
@@ -262,8 +271,9 @@ public class KnownActorCell<ActorType: Actor>: ActorCell {
     }
     
     /// Called by context.actorOf to create a cell with an actor
-    public init(system: ActorSystem, parent: ActorRef?, actorConstructor: @escaping (KnownActorCell<ActorType>)->ActorType, actorRef: ActorRef) {
+    public init(system: ActorSystem, parent: ActorRef?, actorConstructor: @escaping (KnownActorCell<ActorType>)->ActorType, actorRef: KnownActorRef<ActorType>) {
         self.actorConstructor = actorConstructor
+        self.knownThis = actorRef
         super.init(system: system, parent: parent, actorRef: actorRef)
     }
 }
