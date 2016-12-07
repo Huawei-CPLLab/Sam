@@ -17,6 +17,11 @@ public protocol UnspecifiedActor {
     func postStop()
     func childTerminated(_ child: ActorRef)
 }
+
+extension UnspecifiedActor {
+    public var this: ActorRef { return context.this }
+}
+
 public protocol Actor: UnspecifiedActor {
     associatedtype ActorMessage: Message
     mutating func receive(_ msg: ActorMessage)
