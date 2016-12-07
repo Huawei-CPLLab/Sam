@@ -48,7 +48,7 @@ public class ActorCell {
     
     /// To the ActorRef of this actor. Unowned due to not want to cause cycle
     private unowned let unspecifiedThis: ActorRef
-    var this: ActorRef {
+    public var this: ActorRef {
         get { return unspecifiedThis }
     }
     
@@ -260,7 +260,7 @@ public class KnownActorCell<ActorType: Actor>: ActorCell {
     
     /// To the ActorRef of this actor. Unowned due to not want to cause cycle
     private unowned let knownThis: KnownActorRef<ActorType>
-    override var this: KnownActorRef<ActorType> {
+    override public  var this: KnownActorRef<ActorType> {
         get { return knownThis }
     }
     
