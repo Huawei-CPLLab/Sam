@@ -132,7 +132,7 @@ public class ActorCell {
         childRef.actorCell = childContext
         
         // 3. ChildActor
-        let childActor = actorConstructor(childContext)
+        var childActor = actorConstructor(childContext)
         childContext.actor = childActor
         childActor.preStart() // Now the actor is ready to use
         
