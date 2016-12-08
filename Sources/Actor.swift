@@ -12,10 +12,10 @@ public protocol UnspecifiedActor {
 
     mutating func supervisorStrategy(error: Error) -> Void
     
-    func preStart()
-    func willStop()
-    func postStop()
-    func childTerminated(_ child: ActorRef)
+    mutating func preStart()
+    mutating func willStop()
+    mutating func postStop()
+    mutating func childTerminated(_ child: ActorRef)
 }
 
 extension UnspecifiedActor {
